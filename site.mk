@@ -26,7 +26,7 @@ GLUON_SITE_PACKAGES := \
 	iwinfo
 
 
-DEFAULT_GLUON_RELEASE := 2016.2~$(GLUON_BRANCH)-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 2016.2.5~$(GLUON_BRANCH)-$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
@@ -39,3 +39,6 @@ GLUON_REGION ?= eu
 
 # Languages to include
 GLUON_LANGS ?= en de
+
+# add ath10k support for 802.11s
+GLUON_ATH10K_MESH := 11s
