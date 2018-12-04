@@ -1,141 +1,223 @@
+##	gluon site.mk makefile example
+
+##	GLUON_SITE_PACKAGES
+#		specify gluon/openwrt packages to include here
+#		The gluon-mesh-batman-adv-* package must come first because of the dependency resolution
+
 GLUON_SITE_PACKAGES := \
 	gluon-mesh-batman-adv-15 \
-	gluon-alfred \
 	gluon-respondd \
 	gluon-autoupdater \
-	gluon-config-mode-autoupdater \
-	gluon-config-mode-contact-info \
 	gluon-config-mode-core \
-	gluon-config-mode-geo-location \
 	gluon-config-mode-hostname \
+	gluon-config-mode-autoupdater \
 	gluon-config-mode-mesh-vpn \
+	gluon-config-mode-geo-location \
+	gluon-config-mode-contact-info \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
-	gluon-luci-admin \
-	gluon-luci-autoupdater \
-	gluon-luci-portconfig \
-	gluon-luci-private-wifi \
-	gluon-luci-wifi-config \
-	gluon-next-node \
+	gluon-web-admin \
+	gluon-web-autoupdater \
+	gluon-web-mesh-vpn-fastd \
+	gluon-web-network \
+	gluon-web-wifi-config \
+	gluon-web-private-wifi \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
+	gluon-radv-filterd \
 	gluon-setup-mode \
 	gluon-status-page \
-	haveged \
-	iptables \
+	gluon-status-page-mesh-batman-adv \
 	iwinfo \
-	gluon-ssid-changer
-	
-	# support the USB stack
-USB_PACKAGES_BASIC := \
-	kmod-usb-core \
-	kmod-usb2
+	haveged
 
-# FAT32 Support for USB
-USB_PACKAGES_STORAGE := \
-	block-mount \
-	kmod-fs-ext4 \
-	kmod-fs-vfat \
-	kmod-usb-storage  \
-	kmod-usb-storage-extras  \
-	blkid  \
-	swap-utils  \
-	kmod-nls-cp1250  \
-	kmod-nls-cp1251  \
-	kmod-nls-cp437  \
-	kmod-nls-cp775  \
-	kmod-nls-cp850  \
-	kmod-nls-cp852  \
-	kmod-nls-cp866  \
-	kmod-nls-iso8859-1  \
-	kmod-nls-iso8859-13  \
-	kmod-nls-iso8859-15  \
-	kmod-nls-iso8859-2  \
-	kmod-nls-koi8r  \
-	kmod-nls-utf8
-
-USB_PACKAGES_NET := \
-	kmod-usb-net \
-	kmod-usb-net-asix \
-	kmod-usb-net-asix-ax88179 \
-	kmod-usb-net-cdc-eem \
-	kmod-usb-net-cdc-ether \
-	kmod-usb-net-cdc-mbim \
-	kmod-usb-net-cdc-ncm \
-	kmod-usb-net-cdc-subset \
-	kmod-usb-net-dm9601-ether \
-	kmod-usb-net-hso \
-	kmod-usb-net-huawei-cdc-ncm \
-	kmod-usb-net-ipheth \
-	kmod-usb-net-kalmia \
-	kmod-usb-net-kaweth \
-	kmod-usb-net-mcs7830 \
-	kmod-usb-net-pegasus \
-	kmod-usb-net-qmi-wwan \
-	kmod-usb-net-rndis \
-	kmod-usb-net-rtl8150 \
-	kmod-usb-net-rtl8152 \
-	kmod-usb-net-sierrawireless \
-	kmod-usb-net-smsc95xx \
-	kmod-mii \
-	kmod-nls-base
-
-#Tool und Packages set von ffgoe übernommen
-TOOLS_PACKAGES := \
-	joe \
-	tcpdump \
-	vnstat \
-	iperf \
-	iperf3 \
-	socat \
-	usbutils
-
-
-ifeq ($(GLUON_TARGET),x86-generic)
-# support the usb stack on x86 devices
-# and add a few common USB NICs
+# add offline ssid only if the target has wifi device
+ifeq ($(GLUON_TARGET),ar71xx-generic)
 GLUON_SITE_PACKAGES += \
-	kmod-usb-hid \
-	$(USB_PACKAGES_BASIC) \
-	$(USB_PACKAGES_STORAGE) \
-	$(USB_PACKAGES_NET) \
-	$(TOOLS_PACKAGES)
+	gluon-ssid-changer 
 endif
 
-#ar71xx-generic
-GLUON_DIR505A1_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_TLWR842_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_TLWR1043_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_TLWR2543_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_TLWDR4300_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_WNDR3700_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_WRT160NL_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-# GLUON_DIR825B1_SITE_PACKAGES := kmod-usb-core kmod-usb2 tcpdump vnstat iperf usbutils joe kmod-mii kmod-usb-net kmod-usb-net-asix-ax88179 kmod-usb-net kmod-nls-base # too big
-GLUON_GLINET_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_WZRHPG450H_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_WZRHPAG300H_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
-GLUON_ARCHERC7_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
+ifeq ($(GLUON_TARGET),ar71xx-mikrotik)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
 
-#mpc85xx-generic
-GLUON_TLWDR4900_SITE_PACKAGES := $(USB_PACKAGES_BASIC) $(TOOLS_PACKAGES) $(USB_PACKAGES_STORAGE)
+ifeq ($(GLUON_TARGET),ar71xx-nand)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ar71xx-tiny)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ipq806x)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),mpc85xx-generic)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),mvebu)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ramips-mt7620)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ramips-mt7628)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ramips-rt305x)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
+
+ifeq ($(GLUON_TARGET),ramips-mt7621)
+GLUON_SITE_PACKAGES += \
+	gluon-ssid-changer
+endif
+
+# add addition network drivers and usb stuff only to targes where disk space does not matter.
+ifeq ($(GLUON_TARGET),x86-generic)
+GLUON_SITE_PACKAGES += \
+        kmod-usb-core \
+        kmod-usb-ohci-pci \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether \
+        kmod-sky2 \
+        kmod-r8169 \
+        kmod-forcedeth \
+        kmod-8139too \
+	kmod-atl2 \
+	kmod-igb
+endif
+
+ifeq ($(GLUON_TARGET),x86-64)
+GLUON_SITE_PACKAGES += \
+        kmod-usb-core \
+        kmod-usb-ohci-pci \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether \
+        kmod-sky2 \
+        kmod-r8169 \
+        kmod-forcedeth \
+        kmod-8139too \
+	kmod-atl2 \
+	kmod-igb
+endif
+
+ifeq ($(GLUON_TARGET),x86-geode)
+GLUON_SITE_PACKAGES += \
+        kmod-usb-core \
+        kmod-usb-ohci-pci \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether \
+        kmod-sky2 \
+        kmod-r8169 \
+        kmod-forcedeth \
+        kmod-8139too \
+        kmod-atl2 \
+        kmod-igb
+endif
+
+# Add offline ssid, network drivers and usb stuff to raspberry and banana pi images
+
+ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer \
+        kmod-usb-core \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether
+endif
+
+ifeq ($(GLUON_TARGET),brcm2708-bcm2709)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer \
+        kmod-usb-core \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether
+endif
+
+ifeq ($(GLUON_TARGET),brcm2708-bcm2710)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer \
+        kmod-usb-core \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether
+endif
+
+ifeq ($(GLUON_TARGET),sunxi)
+GLUON_SITE_PACKAGES += \
+        gluon-ssid-changer \
+        kmod-usb-core \
+        kmod-usb2 \
+        kmod-usb-hid \
+        kmod-usb-net \
+        kmod-usb-net-asix \
+        kmod-usb-net-dm9601-ether
+endif
 
 
-DEFAULT_GLUON_RELEASE := 2016.2.6~$(GLUON_BRANCH)-$(shell date '+%Y%m%d')
+##	DEFAULT_GLUON_RELEASE
+#		version string to use for images
+#		gluon relies on
+#			opkg compare-versions "$1" '>>' "$2"
+#		to decide if a version is newer or not.
+
+DEFAULT_GLUON_RELEASE := 2018.1.3~$(GLUON_BRANCH)-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_CHECKOUT := v2018.1.3
+
+##	GLUON_RELEASE
+#		call make with custom GLUON_RELEASE flag, to use your own release version scheme.
+#		e.g.:
+#			$ make images GLUON_RELEASE=23.42+5
+#		would generate images named like this:
+#			gluon-ff%site_code%-23.42+5-%router_model%.bin
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+GLUON_CHECKOUT ?= $(DEFAULT_GLUON_CHECKOUT)
 
+# Default priority for updates.
 GLUON_PRIORITY ?= 0
+
+# Default gluon branch.
 GLUON_BRANCH ?= stable 
-export GLUON_BRANCH
 
-GLUON_TARGET ?= ar71xx-generic
-#für D-Link DIR-860L / BROKEN=1 kompilieren
-#GLUON_TARGET ?= ramips-mt7621 
-export GLUON_TARGET
-#GLUON_BUILDDIR = build/$(GLOUN_TARGET)/
+# Region code required for some images; supported values: us eu
+GLUON_REGION ?= eu
 
-GLUON_LANGS ?= de en
-GLUON_REGION = eu
-GLUON_ATH10K_MESH = 11s
-BROKEN = 1 
+# Languages to include
+GLUON_LANGS ?= en de
+
+# Select ath10k Firmware for adhoc
+
+GLUON_ATH10K_MESH ?= 11s
